@@ -18,11 +18,100 @@ Install and manage Duo auth for SSH with PAM
 
 The following parameters are available in the `profile_duo` class:
 
+* [`accept_env_factor,`](#accept_env_factor,)
+* [`autopush,`](#autopush,)
+* [`failmode,`](#failmode,)
+* [`fallback_local_ip,`](#fallback_local_ip,)
+* [`group,`](#group,)
+* [`http_proxy,`](#http_proxy,)
+* [`host,`](#host,)
+* [`ikey,`](#ikey,)
+* [`motd,`](#motd,)
+* [`package,`](#package,)
+* [`pam_config,`](#pam_config,)
+* [`prompts,`](#prompts,)
+* [`pushinfo,`](#pushinfo,)
+* [`skey,`](#skey,)
+* [`usage,`](#usage,)
 * [`yumrepo_baseurl`](#yumrepo_baseurl)
 * [`yumrepo_description`](#yumrepo_description)
 * [`yumrepo_gpgkey`](#yumrepo_gpgkey)
 * [`yumrepo_name`](#yumrepo_name)
+* [`accept_env_factor`](#accept_env_factor)
+* [`autopush`](#autopush)
+* [`failmode`](#failmode)
+* [`fallback_local_ip`](#fallback_local_ip)
+* [`group`](#group)
+* [`http_proxy`](#http_proxy)
+* [`host`](#host)
+* [`ikey`](#ikey)
+* [`motd`](#motd)
+* [`package`](#package)
 * [`pam_config`](#pam_config)
+* [`prompts`](#prompts)
+* [`pushinfo`](#pushinfo)
+* [`skey`](#skey)
+* [`usage`](#usage)
+
+##### <a name="accept_env_factor,"></a>`accept_env_factor,`
+
+Duo configuration for 'accept_env_factor'
+
+##### <a name="autopush,"></a>`autopush,`
+
+Duo configuration for 'autopush'
+
+##### <a name="failmode,"></a>`failmode,`
+
+Duo configuration for 'failmode'
+
+##### <a name="fallback_local_ip,"></a>`fallback_local_ip,`
+
+Duo configuration for 'fallback_local_ip', defaults to 'no'
+
+##### <a name="group,"></a>`group,`
+
+Duo configuration for 'groups' Group restriction
+
+##### <a name="http_proxy,"></a>`http_proxy,`
+
+Duo configuration for 'http_proxy' HTTP proxy setting
+
+##### <a name="host,"></a>`host,`
+
+Duo API host
+
+##### <a name="ikey,"></a>`ikey,`
+
+Duo integration key
+
+##### <a name="motd,"></a>`motd,`
+
+Duo configuration for 'motd' MOTD display (only applies if $usage = 'login')
+
+##### <a name="package,"></a>`package,`
+
+
+
+##### <a name="pam_config,"></a>`pam_config,`
+
+pam resource parameters for setting up duo pam configurations
+
+##### <a name="prompts,"></a>`prompts,`
+
+Duo configuration for 'prompts'
+
+##### <a name="pushinfo,"></a>`pushinfo,`
+
+Duo configuration for 'pushinfo'
+
+##### <a name="skey,"></a>`skey,`
+
+Duo secret key
+
+##### <a name="usage,"></a>`usage,`
+
+Duo usage method - defaults to 'pam'
 
 ##### <a name="yumrepo_baseurl"></a>`yumrepo_baseurl`
 
@@ -48,9 +137,93 @@ Data type: `String`
 
 name of yumrepo used to install duo_unix package
 
+##### <a name="accept_env_factor"></a>`accept_env_factor`
+
+Data type: `String`
+
+
+
+##### <a name="autopush"></a>`autopush`
+
+Data type: `String`
+
+
+
+##### <a name="failmode"></a>`failmode`
+
+Data type: `String`
+
+
+
+##### <a name="fallback_local_ip"></a>`fallback_local_ip`
+
+Data type: `String`
+
+
+
+##### <a name="group"></a>`group`
+
+Data type: `String`
+
+
+
+##### <a name="http_proxy"></a>`http_proxy`
+
+Data type: `String`
+
+
+
+##### <a name="host"></a>`host`
+
+Data type: `String`
+
+
+
+##### <a name="ikey"></a>`ikey`
+
+Data type: `String`
+
+
+
+##### <a name="motd"></a>`motd`
+
+Data type: `String`
+
+
+
+##### <a name="package"></a>`package`
+
+Data type: `String`
+
+
+
 ##### <a name="pam_config"></a>`pam_config`
 
 Data type: `Hash`
 
-pam resource parameters for setting up duo pam configurations
+
+
+##### <a name="prompts"></a>`prompts`
+
+Data type: `String`
+
+
+
+##### <a name="pushinfo"></a>`pushinfo`
+
+Data type: `String`
+
+
+
+##### <a name="skey"></a>`skey`
+
+Data type: `String`
+
+
+
+##### <a name="usage"></a>`usage`
+
+Data type: `String`
+
+
 
