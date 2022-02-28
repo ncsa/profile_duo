@@ -1,0 +1,5 @@
+---
+profile_duo::yumrepo_baseurl: "https://pkg.duosecurity.com/CentOS/$releasever/$basearch"
+profile_duo::yumrepo_description: "Duo Security Repository"
+profile_duo::yumrepo_gpgkey: "https://duo.com/DUO-GPG-PUBLIC-KEY.asc"
+profile_duo::yumrepo_name: "duosecurity"
