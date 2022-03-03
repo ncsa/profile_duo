@@ -1,39 +1,40 @@
 ---
 profile_duo::pam_config:
-  "remove auth password-auth from sshd":
+  "Remove auth password-auth from sshd":
     ensure: "absent"
     module: "password-auth"
     service: "sshd"
     type: "auth"
-  "add auth pam_deny.so to sshd":
+  "Set auth pam_deny.so to sshd":
     control: "required"
     ensure: "present"
     module: "pam_deny.so"
     position: "before *[type=\"auth\" and module=\"postlogin\"]"
     service: "sshd"
     type: "auth"
-  "add auth pam_succeed_if.so to sshd":
+  "Set auth pam_duo.so to sshd":
+    control: "sufficient"
+    ensure: "present"
+    module: "pam_duo.so"
+    position: "before *[type=\"auth\" and module=\"pam_deny.so\"]"
+    service: "sshd"
+    type: "auth"
+  "Set auth pam_succeed_if.so to sshd":
     arguments:
       - "uid"
+      - ">="
       - "1000"
       - "quiet_success"
     control: "requisite"
     ensure: "present"
     module: "pam_succeed_if.so"
-    position: "before *[type=\"auth\" and module=\"pam_deny.so\"]"
-    service: "sshd"
-    type: "auth"
-  "add auth pam_duo.so to sshd":
-    control: "sufficient"
-    ensure: "present"
-    module: "pam_duo.so"
-    position: "before *[type=\"auth\" and module=\"pam_succeed_if.so\"]"
+    position: "before *[type=\"auth\" and module=\"pam_duo.so\"]"
     service: "sshd"
     type: "auth"
   "add auth pam_env.so to sshd":
     control: "required"
     ensure: "present"
     module: "pam_env.so"
-    position: "before *[type=\"auth\" and module=\"pam_duo.so\"]"
+    position: "before *[type=\"auth\" and module=\"pam_succeed_if.so\"]"
     service: "sshd"
     type: "auth"
