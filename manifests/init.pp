@@ -104,7 +104,7 @@ class profile_duo (
     ensure  => present,
     owner   => 'root',
     group   => 'root',
-    mode    => '4755',
+    mode    => '0755',
     require => Package[$package];
   }
 
