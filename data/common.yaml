@@ -1,7 +1,7 @@
 ---
 profile_duo::accept_env_factor: "no"
 profile_duo::autopush: "no"
-profile_duo::failmode: "safe"
+profile_duo::failmode: "secure"
 profile_duo::fallback_local_ip: "no"
 profile_duo::group: ""
 profile_duo::host: ""
