@@ -82,7 +82,7 @@ class profile_duo (
     fail('ikey, skey, and host must all be defined.')
   }
 
-  ## install Pakrat Yum repo for Duo
+  ## install Yum repo for Duo
   yumrepo { $yumrepo_name:
     ensure   => 'present',
     enabled  => 1,
@@ -90,6 +90,7 @@ class profile_duo (
     baseurl  => $yumrepo_baseurl,
     gpgcheck => 1,
     gpgkey   => $yumrepo_gpgkey,
+    priority => 1,
   }
 
   ## INSTALL $package
