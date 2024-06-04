@@ -1,60 +1,54 @@
 # @summary Install and manage Duo auth for SSH with PAM
 #
-# @param accept_env_factor,
+# @param accept_env_factor
 #   Duo configuration for 'accept_env_factor'
 #
-# @param autopush,
+# @param autopush
 #   Duo configuration for 'autopush'
 #
-# @param failmode,
+# @param failmode
 #   Duo configuration for 'failmode'
 #
-# @param fallback_local_ip,
+# @param fallback_local_ip
 #   Duo configuration for 'fallback_local_ip', defaults to 'no'
 #
-# @param group,
+# @param group
 #   Duo configuration for 'groups' Group restriction
 #
-# @param http_proxy,
+# @param http_proxy
 #   Duo configuration for 'http_proxy' HTTP proxy setting
 #
-# @param host,
+# @param host
 #   Duo API host
 #
-# @param ikey,
+# @param ikey
 #   Duo integration key
 #
-# @param motd,
+# @param motd
 #   Duo configuration for 'motd' MOTD display (only applies if $usage = 'login')
 #
-# @param package,
+# @param package
 #
-# @param pam_config,
+# @param pam_config
 #   pam resource parameters for setting up duo pam configurations
 #
-# @param prompts,
+# @param prompts
 #   Duo configuration for 'prompts'
 #
-# @param pushinfo,
+# @param pushinfo
 #   Duo configuration for 'pushinfo'
 #
-# @param skey,
+# @param required_packages
+#   List of required packages to install as prerequisites
+#
+# @param skey
 #   Duo secret key
 #
-# @param usage,
+# @param usage
 #   Duo usage method - defaults to 'pam'
 #
-# @param yumrepo_baseurl
-#   baseurl of yumrepo used to install duo_unix package
-#
-# @param yumrepo_description
-#   description of yumrepo used to install duo_unix package
-#
-# @param yumrepo_gpgkey
-#   gpgkey of yumrepo used to install duo_unix package
-#
-# @param yumrepo_name
-#   name of yumrepo used to install duo_unix package
+# @param yumrepo
+#   resource for duo yum repository
 #
 class profile_duo (
   String $accept_env_factor,
@@ -70,39 +64,36 @@ class profile_duo (
   Hash   $pam_config,
   String $prompts,
   String $pushinfo,
+  Array[String] $required_packages,
   String $skey,
   String $usage,
-  String $yumrepo_baseurl,
-  String $yumrepo_description,
-  String $yumrepo_gpgkey,
-  String $yumrepo_name,
+  Hash   $yumrepo,
 ) {
-
   if $ikey == '' or $skey == '' or $host == '' {
     fail('ikey, skey, and host must all be defined.')
   }
 
+  ensure_packages( $required_packages, { 'ensure' => 'present' })
+
   ## install Yum repo for Duo
-  yumrepo { $yumrepo_name:
-    ensure   => 'present',
-    enabled  => 1,
-    descr    => $yumrepo_description,
-    baseurl  => $yumrepo_baseurl,
-    gpgcheck => 1,
-    gpgkey   => $yumrepo_gpgkey,
-    priority => 1,
+  $yumrepo_defaults = {
+    ensure  => present,
+    enabled => true,
+  }
+  if ! empty($yumrepo) {
+    ensure_resources( 'yumrepo', $yumrepo, $yumrepo_defaults )
   }
 
   ## INSTALL $package
-  package {  $package:
+  package { $package:
     ensure  => 'installed',
-    require => [
-      Yumrepo[$yumrepo_name],
-    ],
+    #require => [
+    #  Yumrepo[$yumrepo],
+    #],
   }
 
   file { '/usr/sbin/login_duo':
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
@@ -112,7 +103,7 @@ class profile_duo (
   if $usage == 'pam' {
     ## CONFIGURE pam_duo
     file { '/etc/duo/pam_duo.conf':
-      ensure  => present,
+      ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0600',
@@ -130,8 +121,7 @@ class profile_duo (
       }
     }
   }
-  else
-  {
+  else {
     ## $usage == 'login'
     fail('usage = \'login\' is not supported.')
 
@@ -143,7 +133,5 @@ class profile_duo (
     #  content => template('duo_unix/duo.conf.erb'),
     #  require => Package[$package];
     #}
-
   }
-
 }
