@@ -41,10 +41,7 @@ profile_duo::pam_config:
 
 profile_duo::required_packages: []
 
-profile_duo::yumrepo:
-  duosecurity:
-    baseurl: "https://pkg.duosecurity.com/RedHat/$releasever/$basearch"
-    descr: "Duo Security Repository"
-    enabled: 1
-    gpgcheck: 1
-    gpgkey: "https://duo.com/DUO-GPG-PUBLIC-KEY.asc"
+# DUO DOES NOT PROVIDE A REPO OR PACKAGES FOR SUSE
+# YOU WILL NEED TO https://duo.com/docs/duounix#build-and-install-from-source
+# AND EITHER ADD THE duo_unix PACKAGE TO A LOCAL REPO OR INCLUDE IN THE OS IMAGE
+profile_duo::yumrepo: {}
