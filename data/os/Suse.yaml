@@ -1,25 +1,18 @@
 ---
 profile_duo::pam_config:
-  "Remove auth password-auth from sshd":
+  "Remove auth common-auth from sshd":
     ensure: "absent"
-    module: "password-auth"
+    module: "common-auth"
     service: "sshd"
     type: "auth"
-  "Set auth pam_deny.so to sshd":
+  "add auth pam_env.so to sshd":
     control: "required"
     ensure: "present"
-    module: "pam_deny.so"
-    position: "before *[type=\"auth\" and module=\"postlogin\"]"
+    module: "pam_env.so"
+    position: "after *[type=\"auth\" and module=\"pam_nologin.so\"]"
     service: "sshd"
     type: "auth"
-  "Set auth pam_duo.so to sshd":
-    control: "sufficient"
-    ensure: "present"
-    module: "pam_duo.so"
-    position: "before *[type=\"auth\" and module=\"pam_deny.so\"]"
-    service: "sshd"
-    type: "auth"
-  "Set auth pam_succeed_if.so to sshd":
+  "add auth pam_succeed_if.so to sshd":
     arguments:
       - "uid"
       - ">="
@@ -28,14 +21,39 @@ profile_duo::pam_config:
     control: "requisite"
     ensure: "present"
     module: "pam_succeed_if.so"
-    position: "before *[type=\"auth\" and module=\"pam_duo.so\"]"
+    position: "after *[type=\"auth\" and module=\"pam_env.so\"]"
     service: "sshd"
     type: "auth"
-  "add auth pam_env.so to sshd":
+  "add auth pam_duo.so to sshd":
+    control: "sufficient"
+    ensure: "present"
+    module: "/lib/security/pam_duo.so"
+    position: "after *[type=\"auth\" and module=\"pam_succeed_if.so\"]"
+    service: "sshd"
+    type: "auth"
+  "add auth pam_unix.so to sshd":
+    arguments:
+      - "try_first_pass"
+    control: "requisite"
+    ensure: "present"
+    module: "pam_unix.so"
+    position: "after *[type=\"auth\" and module=\"/lib/security/pam_duo.so\"]"
+    service: "sshd"
+    type: "auth"
+  "add auth pam_sss.so to sshd":
+    arguments:
+      - "use_first_path"
+    control: "sufficient"
+    ensure: "present"
+    module: "pam_sss.so"
+    position: "after *[type=\"auth\" and module=\"pam_unix.so\"]"
+    service: "sshd"
+    type: "auth"
+  "add auth pam_deny.so to sshd":
     control: "required"
     ensure: "present"
-    module: "pam_env.so"
-    position: "before *[type=\"auth\" and module=\"pam_succeed_if.so\"]"
+    module: "pam_deny.so"
+    position: "after *[type=\"auth\" and module=\"pam_sss.so\"]"
     service: "sshd"
     type: "auth"
 
@@ -44,4 +62,7 @@ profile_duo::required_packages: []
 # DUO DOES NOT PROVIDE A REPO OR PACKAGES FOR SUSE
 # YOU WILL NEED TO https://duo.com/docs/duounix#build-and-install-from-source
 # AND EITHER ADD THE duo_unix PACKAGE TO A LOCAL REPO OR INCLUDE IN THE OS IMAGE
+## IF YOU BUILD FROM SOURCE, SET THE PACKAGE TO null
+##profile_duo::package null
+## IF YOU ARE INCLUDING IN THE IMAGE, SET THE REPO DATA TO EMPTY HASH
 profile_duo::yumrepo: {}

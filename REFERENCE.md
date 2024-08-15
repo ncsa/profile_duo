@@ -92,7 +92,7 @@ Duo configuration for 'motd' MOTD display (only applies if $usage = 'login')
 
 ##### <a name="-profile_duo--package"></a>`package`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 
 

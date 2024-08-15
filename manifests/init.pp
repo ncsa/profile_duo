@@ -51,23 +51,23 @@
 #   resource for duo yum repository
 #
 class profile_duo (
-  String $accept_env_factor,
-  String $autopush,
-  String $failmode,
-  String $fallback_local_ip,
-  String $group,
-  String $http_proxy,
-  String $host,
-  String $ikey,
-  String $motd,
-  String $package,
-  Hash   $pam_config,
-  String $prompts,
-  String $pushinfo,
-  Array[String] $required_packages,
-  String $skey,
-  String $usage,
-  Hash   $yumrepo,
+  String           $accept_env_factor,
+  String           $autopush,
+  String           $failmode,
+  String           $fallback_local_ip,
+  String           $group,
+  String           $host,
+  String           $http_proxy,
+  String           $ikey,
+  String           $motd,
+  Optional[String] $package,
+  Hash             $pam_config,
+  String           $prompts,
+  String           $pushinfo,
+  Array[String]    $required_packages,
+  String           $skey,
+  String           $usage,
+  Hash             $yumrepo,
 ) {
   if $ikey == '' or $skey == '' or $host == '' {
     fail('ikey, skey, and host must all be defined.')
@@ -85,11 +85,13 @@ class profile_duo (
   }
 
   ## INSTALL $package
-  package { $package:
-    ensure  => 'installed',
-    #require => [
-    #  Yumrepo[$yumrepo],
-    #],
+  if $package {
+    package { $package:
+      ensure  => 'installed',
+      #require => [
+      #  Yumrepo[$yumrepo],
+      #],
+    }
   }
 
   file { '/usr/sbin/login_duo':
